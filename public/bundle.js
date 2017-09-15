@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -192,7 +192,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(9);
+var	fixUrls = __webpack_require__(6);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -506,51 +506,6 @@ function updateLink (link, options, obj) {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _jquery = __webpack_require__(3);
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var _barrel = __webpack_require__(4);
-
-var _barrel2 = _interopRequireDefault(_barrel);
-
-var _carousel = __webpack_require__(5);
-
-var _carousel2 = _interopRequireDefault(_carousel);
-
-var _gotop = __webpack_require__(6);
-
-var _gotop2 = _interopRequireDefault(_gotop);
-
-__webpack_require__(7);
-
-__webpack_require__(10);
-
-__webpack_require__(12);
-
-__webpack_require__(14);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// import './css/icon-font/iconfont.css'
-
-
-new _gotop2.default();
-
-var barrel = new _barrel2.default((0, _jquery2.default)('.landscope-img'));
-(0, _jquery2.default)('.load-more').on('click', function () {
-    new _barrel2.default((0, _jquery2.default)('.landscope-img'));
-});
-
-// Carousel.init($('.carousel'));
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10810,236 +10765,58 @@ return jQuery;
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(4);
+
+__webpack_require__(7);
+
+__webpack_require__(9);
+
+__webpack_require__(11);
+
+var _jquery = __webpack_require__(2);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _gotop = __webpack_require__(13);
+
+var _gotop2 = _interopRequireDefault(_gotop);
+
+var _barrel = __webpack_require__(14);
+
+var _barrel2 = _interopRequireDefault(_barrel);
+
+var _carousel = __webpack_require__(15);
+
+var _carousel2 = _interopRequireDefault(_carousel);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+
+// import './css/icon-font/iconfont.css'
+(0, _gotop2.default)().init((0, _jquery2.default)('body'));
+var barrel = (0, _barrel2.default)();
+barrel.init((0, _jquery2.default)('.landscope-img'));
+(0, _jquery2.default)('.load-more').on('click', function () {
+    barrel.init((0, _jquery2.default)('.landscope-img'));
+});
+
+(0, _carousel2.default)().init((0, _jquery2.default)('.carousel'));
+
+/***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function () {
-
-    function Barrel($ct) {
-        this.$ct = $ct;
-        this.ctWidth = $ct.width();
-        this.basicHeight = 200;
-        console.log(this.ctWidth);
-        console.log('barrel');
-        this.ajaxImages();
-    }
-
-    Barrel.prototype = {
-        ajaxImages: function ajaxImages() {
-            var _this = this;
-            $.get('https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=\u98CE\u666F&image_type=photo&per_page=20&page=' + Math.floor(Math.random() * 10)).done(function (data) {
-                _this.render(data);
-            });
-        },
-        render: function render(data) {
-            var _this2 = this;
-
-            console.log(data);
-            var imgArray = [];
-            var rowTotalWidth = 0;
-            data.hits.forEach(function (imgInfo) {
-                imgInfo.rate = imgInfo.webformatWidth / imgInfo.webformatHeight;
-                var imgWidthBasic = imgInfo.rate * _this2.basicHeight;
-                if (rowTotalWidth + imgWidthBasic < _this2.ctWidth) {
-                    rowTotalWidth += imgWidthBasic;
-                    imgArray.push(imgInfo);
-                } else {
-                    var newRowHeight = _this2.ctWidth / rowTotalWidth * _this2.basicHeight;
-                    _this2.layout(newRowHeight, imgArray);
-                    imgArray = [imgInfo];
-                    rowTotalWidth = imgWidthBasic;
-                }
-            });
-        },
-        layout: function layout(newHeight, imgArray) {
-            var $imgCt = $('<div></div>');
-            imgArray.forEach(function (imgInfo) {
-                var $img = $('<img>');
-                $img.attr('src', imgInfo.webformatURL);
-                $img.height(newHeight + 'px');
-                $imgCt.append($img);
-            });
-            this.$ct.append($imgCt);
-            console.log(this.ctWidth);
-        }
-    };
-
-    return Barrel;
-};
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * car
- * @authors hunger (hunger@jirengu.com)
- * @date    2015-10-21 17:21:54
- * @version $Id$
- */
-
-module.exports = function () {
-
-	var Carousel = function () {
-
-		var carouselList = [];
-
-		function init($carousel) {
-			console.log('carrousel');
-			$carousel.each(function () {
-				var $cal = $(this);
-				if ($cal.hasClass('init')) {
-					return;
-				}
-				carouselList.push(new _Carousel($cal));
-				$cal.addClass('init');
-			});
-		}
-
-		function getList() {
-			return carouselList;
-		}
-
-		function _Carousel($carousel) {
-			this.$carousel = $carousel;
-			var $ct = this.$ct = $carousel.find('.img-ct');
-			this.$pre = $carousel.find('.pre');
-			this.$next = $carousel.find('.next');
-			this.imgWidth = $ct.find('li').width();
-			this.imgSize = $ct.find('li').size();
-
-			$ct.css('width', this.imgWidth * this.imgSize);
-			this.bind();
-			this.autoPlay();
-		}
-
-		_Carousel.prototype = {
-
-			bind: function bind() {
-				var _this = this;
-				this.$pre.on('click', function () {
-					_this.showPre();
-				});
-				this.$next.on('click', function () {
-					_this.showNext();
-				});
-			},
-
-			showPre: function showPre() {
-				this.$ct.prepend(this.$ct.children().last());
-				this.$ct.css('left', 0 - this.imgWidth);
-				this.$ct.animate({
-					'left': 0
-				});
-
-				Event.fire('carousel_show_pre');
-			},
-
-			showNext: function showNext() {
-				var $ct = this.$ct;
-				$ct.animate({
-					'left': 0 - this.imgWidth
-				}, function () {
-					$ct.append($ct.children().first());
-					$ct.css('left', 0);
-				});
-
-				Event.fire('carousel_show_next');
-			},
-
-			autoPlay: function autoPlay() {
-				var me = this;
-				this.clock = setInterval(function () {
-					me.showNext();
-				}, 3000);
-			},
-
-			stopPlay: function stopPlay() {
-				clearInterval(this.clock);
-			}
-		};
-
-		return {
-			init: init,
-			getList: getList
-		};
-	}();
-
-	return Carousel;
-};
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function () {
-	function goTop(id) {
-		this.id = id || 'jrg-gotop';
-		console.log('gotop');
-		this.init();
-	}
-
-	goTop.prototype = {
-		init: function init() {
-			var $el = $('#' + this.id);
-			if ($el.length === 0) {
-				console.log('回到顶部');
-				this.$el = $('<button id="' + this.id + '" style="position: fixed; right: 10px; bottom: 10px; ">回到顶部</button>');
-				$('body').append(this.$el);
-			} else {
-				this.$el = $el;
-			}
-			this.$c = $(document);
-
-			this.bind();
-		},
-
-		bind: function bind() {
-			var me = this;
-
-			this.$el.on('click', function () {
-				me.goToTop();
-			});
-
-			this.$c.on('scroll', function () {
-				me.scroll();
-			});
-		},
-
-		goToTop: function goToTop() {
-			this.$c.scrollTop(0);
-		},
-
-		scroll: function scroll(e) {
-			var scrollTop = this.$c.scrollTop();
-			if (scrollTop > 100) {
-				this.$el.show();
-			} else {
-				this.$el.hide();
-			}
-		}
-	};
-
-	return goTop;
-};
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(8);
+var content = __webpack_require__(5);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11064,7 +10841,7 @@ if(false) {
 }
 
 /***/ }),
-/* 8 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -11078,7 +10855,7 @@ exports.push([module.i, "@charset \"UTF-8\";\n/**\n * \n * @authors Your Name (y
 
 
 /***/ }),
-/* 9 */
+/* 6 */
 /***/ (function(module, exports) {
 
 
@@ -11173,13 +10950,13 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 10 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(11);
+var content = __webpack_require__(8);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11204,7 +10981,7 @@ if(false) {
 }
 
 /***/ }),
-/* 11 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -11218,13 +10995,13 @@ exports.push([module.i, "* {\nmargin: 0;\npadding: 0;\nbox-sizing: border-box; \
 
 
 /***/ }),
-/* 12 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(13);
+var content = __webpack_require__(10);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11249,7 +11026,7 @@ if(false) {
 }
 
 /***/ }),
-/* 13 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -11263,13 +11040,13 @@ exports.push([module.i, "@charset \"UTF-8\";\n/**\n * \n * @authors Your Name (y
 
 
 /***/ }),
-/* 14 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(15);
+var content = __webpack_require__(12);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11294,7 +11071,7 @@ if(false) {
 }
 
 /***/ }),
-/* 15 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -11306,6 +11083,263 @@ exports.push([module.i, "@charset \"UTF-8\";\n/**\n * \n * @authors Your Name (y
 
 // exports
 
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _jquery = __webpack_require__(2);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = function () {
+    var goTop = function () {
+        function GoTop(id) {
+
+            this.id = id || 'jrg-gotop';
+            console.log('gotop');
+            this.init();
+        }
+
+        GoTop.prototype = {
+            init: function init() {
+                var $el = (0, _jquery2.default)('#' + this.id);
+                if ($el.length === 0) {
+                    console.log('回到顶部');
+                    this.$el = (0, _jquery2.default)('<button id="' + this.id + '" style="position: fixed; right: 10px; bottom: 10px; ">回到顶部</button>');
+                    (0, _jquery2.default)('body').append(this.$el);
+                } else {
+                    this.$el = $el;
+                }
+                this.$c = (0, _jquery2.default)(document);
+
+                this.bind();
+            },
+
+            bind: function bind() {
+                var me = this;
+
+                this.$el.on('click', function () {
+                    me.goToTop();
+                });
+
+                this.$c.on('scroll', function () {
+                    me.scroll();
+                });
+            },
+
+            goToTop: function goToTop() {
+                this.$c.scrollTop(0);
+            },
+
+            scroll: function scroll(e) {
+                var scrollTop = this.$c.scrollTop();
+                if (scrollTop > 100) {
+                    this.$el.show();
+                } else {
+                    this.$el.hide();
+                }
+            }
+        };
+        return {
+            init: function init() {
+                new GoTop();
+            }
+        };
+    }();
+
+    return goTop;
+};
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _jquery = __webpack_require__(2);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = function () {
+
+    var barrel = function () {
+        function Barrel($ct) {
+            this.$ct = $ct;
+            this.ctWidth = $ct.width();
+            this.basicHeight = 200;
+            console.log(this.ctWidth);
+            console.log('barrel');
+            this.ajaxImages();
+        }
+
+        Barrel.prototype = {
+            ajaxImages: function ajaxImages() {
+                var _this = this;
+                _jquery2.default.get('https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=\u98CE\u666F&image_type=photo&per_page=20&page=' + Math.floor(Math.random() * 10)).done(function (data) {
+                    _this.render(data);
+                });
+            },
+            render: function render(data) {
+                var _this2 = this;
+
+                console.log(data);
+                var imgArray = [];
+                var rowTotalWidth = 0;
+                data.hits.forEach(function (imgInfo) {
+                    imgInfo.rate = imgInfo.webformatWidth / imgInfo.webformatHeight;
+                    var imgWidthBasic = imgInfo.rate * _this2.basicHeight;
+                    if (rowTotalWidth + imgWidthBasic < _this2.ctWidth) {
+                        rowTotalWidth += imgWidthBasic;
+                        imgArray.push(imgInfo);
+                    } else {
+                        var newRowHeight = _this2.ctWidth / rowTotalWidth * _this2.basicHeight;
+                        _this2.layout(newRowHeight, imgArray);
+                        imgArray = [imgInfo];
+                        rowTotalWidth = imgWidthBasic;
+                    }
+                });
+            },
+            layout: function layout(newHeight, imgArray) {
+                var $imgCt = (0, _jquery2.default)('<div></div>');
+                imgArray.forEach(function (imgInfo) {
+                    var $img = (0, _jquery2.default)('<img>');
+                    $img.attr('src', imgInfo.webformatURL);
+                    $img.height(newHeight + 'px');
+                    $imgCt.append($img);
+                });
+                this.$ct.append($imgCt);
+                console.log(this.ctWidth);
+            }
+        };
+        return {
+            init: function init($ct) {
+                $ct.each(function (index, value) {
+                    new Barrel((0, _jquery2.default)(value));
+                });
+            }
+        };
+    }();
+
+    return barrel;
+};
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _jquery = __webpack_require__(2);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = function () {
+
+	var Carousel = function () {
+
+		var carouselList = [];
+
+		function init($carousel) {
+			console.log('carrousel');
+			$carousel.each(function () {
+				var $cal = (0, _jquery2.default)(this);
+				if ($cal.hasClass('init')) {
+					return;
+				}
+				carouselList.push(new _Carousel($cal));
+				$cal.addClass('init');
+			});
+		}
+
+		function getList() {
+			return carouselList;
+		}
+
+		function _Carousel($carousel) {
+			this.$carousel = $carousel;
+			var $ct = this.$ct = $carousel.find('.img-ct');
+			this.$pre = $carousel.find('.pre');
+			this.$next = $carousel.find('.next');
+			this.imgWidth = $ct.find('li').width();
+			console.log($ct.find('li'));
+			this.imgSize = $ct.find('li').length;
+
+			$ct.css('width', this.imgWidth * this.imgSize);
+			this.bind();
+			this.autoPlay();
+		}
+
+		_Carousel.prototype = {
+
+			bind: function bind() {
+				var _this = this;
+				this.$pre.on('click', function () {
+					_this.showPre();
+				});
+				this.$next.on('click', function () {
+					_this.showNext();
+				});
+			},
+
+			showPre: function showPre() {
+				this.$ct.prepend(this.$ct.children().last());
+				this.$ct.css('left', 0 - this.imgWidth);
+				this.$ct.animate({
+					'left': 0
+				});
+
+				// Event.fire('carousel_show_pre');
+			},
+
+			showNext: function showNext() {
+				var $ct = this.$ct;
+				$ct.animate({
+					'left': 0 - this.imgWidth
+				}, function () {
+					$ct.append($ct.children().first());
+					$ct.css('left', 0);
+				});
+
+				// Event.fire('carousel_show_next');
+			},
+
+			autoPlay: function autoPlay() {
+				var me = this;
+				this.clock = setInterval(function () {
+					me.showNext();
+				}, 3000);
+			},
+
+			stopPlay: function stopPlay() {
+				clearInterval(this.clock);
+			}
+		};
+
+		return {
+			init: init,
+			getList: getList
+		};
+	}();
+
+	return Carousel;
+}; /**
+    * car
+    * @authors hunger (hunger@jirengu.com)
+    * @date    2015-10-21 17:21:54
+    * @version $Id$
+    */
 
 /***/ })
 /******/ ]);
