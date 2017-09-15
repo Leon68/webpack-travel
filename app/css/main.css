@@ -378,7 +378,7 @@ aside a {
 }
 
 #contact {
-    /*background: #222 url(./img/map-image.png) no-repeat center;*/
+    background: #222 url(../../public/img/map-image.png) no-repeat center;
 }
 
 #contact > h1 {
