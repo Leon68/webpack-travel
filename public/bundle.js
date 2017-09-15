@@ -10800,10 +10800,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 
 // import './css/icon-font/iconfont.css'
-var barrel = (0, _barrel2.default)();
-
-(0, _jquery2.default)(document).ready(function () {
-    console.log('ready3');
+(0, _jquery2.default)('.img-ct img').ready(function () {
+    var barrel = (0, _barrel2.default)();
+    console.log('ready4');
     (0, _carousel2.default)().init((0, _jquery2.default)('.carousel'));
     barrel.init((0, _jquery2.default)('.landscope-img'));
     (0, _gotop2.default)().init((0, _jquery2.default)('body'));

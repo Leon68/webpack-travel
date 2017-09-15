@@ -11,10 +11,10 @@ import Carousel from './com/carousel'
 
 
 //
-let barrel = Barrel()
 
-$(document).ready(function(){
-    console.log('ready3')
+$('.img-ct img').ready(function(){
+    let barrel = Barrel()
+    console.log('ready4')
     Carousel().init($('.carousel'));
     barrel.init($('.landscope-img'))
     GoTop().init($('body'))
