@@ -11,11 +11,14 @@ import Carousel from './com/carousel'
 
 
 //
-GoTop().init($('body'))
 let barrel = Barrel()
-    barrel.init($('.landscope-img'))
-$('.load-more').on('click', function () {
-    barrel.init($('.landscope-img'))
-})
 
-Carousel().init($('.carousel'));
+$(document).ready(function(){
+    console.log('ready3')
+    Carousel().init($('.carousel'));
+    barrel.init($('.landscope-img'))
+    GoTop().init($('body'))
+    $('.load-more').on('click', function () {
+        barrel.init($('.landscope-img'))
+    })
+})
